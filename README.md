@@ -8,10 +8,11 @@ Esta es una pruena técnica para evaluar las capacidades y habilidades de desarr
 
 ![iPhone 13 Pro](https://github.com/agendapro/SeniorTestMobile/assets/104234396/eff9e5fd-b243-48ed-9b8a-089e528cd01d)
 
-
 El periodo de desarrollo para este ejercicio es de 5 días desde su recepción. Si la prueba es enviada fuera de plazo, el candidato será descalificado y no continuará en el proceso de selección.
 
 Para comenzar con tu trabajo, debes crear una rama con tu nombre y apellido. Ejemplo: `interview/juan-perez` y realizar los commits en esta. Realiza tus commits de forma progresiva como lo harías en tu día a día.
+
+Debes adjuntar un video de la app corriendo en iOS y Android con tus cambios finales.
 
 ## Requerimientos:
 
@@ -30,11 +31,10 @@ Se necesita listar los personajes de la famosa serie de películas "Star Wars". 
 - [ ] Es necesario optimizar la aplicación lo más posible bajo las buenas practicas con React native
 - [ ] Se debe implementar las interfaces con la siguiente API : https://swapi.dev/documentation.
 
-
 ### Pantalla de detalle del personaje
 
 - [ ] Maqueta según el diseño solicitado
-- [ ] los iconos se deben mostrar de la siguiente forma : 
+- [ ] los iconos se deben mostrar de la siguiente forma :
   - si el genero del personaje es masculino, se debe mostrar el simbolo masculino, lo mismo para el genero femenino. En caso de que el personaje no tenga genero, de mostrarse el test "N/A"
   - si el personaje ha pilotado alguna nave espacial, debe mostrar el icono de nave. de lo contrario debe mostrarse el text "N/A"
   - si el personaje ha aparecido en más de 3 peliculas de la franquicia, debe mostrarse el icono de pulgar arriba, sino mostrar el icono de pulgar abajo
@@ -44,7 +44,6 @@ Se necesita listar los personajes de la famosa serie de películas "Star Wars". 
 
 - [ ] Maqueta según el diseño solicitado
 - [ ] El componente de batería debe consistir de un card con 100 Views que represente de forma visual con color verde la batería actual del dispositivo
-- [ ] Arregla los problemas que hay en el módulo nativo DeviceInfoModule que se encuentra en la carpeta iOS. Hay 1 error en `ios/DeviceInfoModule.m`, 1 error en `ios/DeviceInfoModule-Bridging-Header.h`
-- [ ] Extrae las variables batería, modelo y sistema operativo desde el contexto de ejecución nativo.
+- [ ] Crea un módulo nativo que extraiga las variables batería, modelo y sistema operativo desde el contexto de ejecución nativo tanto en iOS como en Android.
 
 Buena suerte potencial compañero!
