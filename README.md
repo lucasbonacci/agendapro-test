@@ -1,6 +1,6 @@
 # Prueba técnica senior mobile
 
-Esta es una pruena técnica para evaluar las capacidades y habilidades de desarrolladores React Native de nivel senior. Para esto, se han destinado varios ejercicios donde es necesario tanto arreglar problemas, ordenar el desorden de algunos componentes, maquetear con diseño, optimizar para performance, refactorizar la navegación y el desarrollo de módulos nativos.
+Esta es una pruena técnica para evaluar las capacidades y habilidades de desarrolladores React Native de nivel senior. Para esto, se han destinado varios ejercicios donde es necesario tanto arreglar problemas, ordenar algunos componentes, maquetar con diseño, optimizar para performance, refactorizar la navegación y el desarrollo de módulos nativos (en pocas palabras, es tu carta de presentación, no omitas nada que creas que puede aportar a que seas tu el próximo integrante del equipo)
 
 <img width="289" alt="image" src="https://github.com/agendapro/SeniorTestMobile/assets/102041608/338a10c9-ada5-4f02-8cb8-c1825114fa0a">
 
