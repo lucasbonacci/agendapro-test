@@ -12,7 +12,7 @@ El periodo de desarrollo para este ejercicio es de 5 días desde su recepción. 
 
 Para comenzar con tu trabajo, debes crear una rama con tu nombre y apellido. Ejemplo: `interview/juan-perez` y realizar los commits en esta. Realiza tus commits de forma progresiva como lo harías en tu día a día.
 
-Debes adjuntar un video de la app corriendo en iOS y Android con tus cambios finales.
+Debes adjuntar un video de la app corriendo en iOS y Android con tus cambios finales y crear un PR diractamente desde tu branch hacia main.
 
 ## Requerimientos:
 
@@ -45,5 +45,6 @@ Se necesita listar los personajes de la famosa serie de películas "Star Wars". 
 - [ ] Maqueta según el diseño solicitado
 - [ ] El componente de batería debe consistir de un card con 100 Views que represente de forma visual con color verde la batería actual del dispositivo
 - [ ] Crea un módulo nativo que extraiga las variables batería, modelo y sistema operativo desde el contexto de ejecución nativo tanto en iOS como en Android.
+
 
 Buena suerte potencial compañero!
