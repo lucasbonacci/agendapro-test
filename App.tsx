@@ -1,18 +1,13 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MainScreen from './src/screens/MainScreen';
-
-const Stack = createNativeStackNavigator();
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import ApplicationNavigator from './src/navigation/Application';
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={MainScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <ApplicationNavigator />
+    </GestureHandlerRootView>
   );
 }
 

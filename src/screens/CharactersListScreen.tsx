@@ -7,6 +7,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import * as NavigationService from '@/navigation/NavigationService';
+import {Paths} from '@/navigation/paths';
 
 interface StarWarsCharacter {
   name: string;
@@ -27,7 +29,7 @@ interface StarWarsCharacter {
   edited: string;
 }
 
-const MainScreen = () => {
+const CharactersListScreen = () => {
   const [starWarsCharacter, setStarWarsCharacters] = useState<
     StarWarsCharacter[] | []
   >([]);
@@ -88,7 +90,7 @@ const MainScreen = () => {
           return (
             <Pressable
               style={styles.itemContainer}
-              onPress={() => console.log('caca')}>
+              onPress={() => NavigationService.navigate(Paths.CharacterDetailScreen)}>
               <View
                 style={{
                   backgroundColor: 'white',
@@ -131,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainScreen;
+export default CharactersListScreen;
