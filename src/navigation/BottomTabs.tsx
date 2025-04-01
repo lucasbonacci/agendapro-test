@@ -1,6 +1,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CharactersListScreen, SettingsScreen} from '@/screens';
 import {Paths} from './paths';
+import {SVG} from '@/assets/svg';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,12 +16,12 @@ function BottomTabs() {
       <Tab.Screen
         name={Paths.CharactersListScreen}
         component={CharactersListScreen}
-        options={{title: 'Characters'}}
+        options={{title: 'Characters', tabBarIcon: () => <SVG.ListIcon />}}
       />
       <Tab.Screen
         name={Paths.SettingsScreen}
         component={SettingsScreen}
-        options={{title: 'Setting'}}
+        options={{title: 'Setting', tabBarIcon: () => <SVG.SettingsIcon />}}
       />
     </Tab.Navigator>
   );
