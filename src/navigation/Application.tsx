@@ -31,6 +31,14 @@ function ApplicationNavigator() {
                   <SVG.ArrowLeftIcon />
                 </View>
               ),
+              headerStyle: {
+                backgroundColor: '#F4C542',
+                height: 120,
+              },
+              headerTitleStyle: {
+                fontWeight: '400',
+                fontSize: 16,
+              },
             })}
             component={CharacterDetailScreen}
           />
