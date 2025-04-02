@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -7,10 +7,14 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+
+import {useGlobalContext} from '@/hooks/useGlobalContext';
 import {StarWarsCharacter} from '@/types/StarWarsCharacter';
 import CharacterItem from './components/CharacterItem';
 import SearchInput from './components/SearchInput';
 import useDebounce from '@/hooks/useDebounce';
+import * as NavigationService from '@/navigation/NavigationService';
+import {Paths} from '@/navigation/paths';
 
 const API_URL = 'https://swapi.dev/api/people/';
 
@@ -22,10 +26,9 @@ const CharactersListScreen = () => {
   const [search, setSearch] = useState('');
   const [nextPage, setNextPage] = useState<string | null>(API_URL);
   const [isLoading, setIsLoading] = useState(false);
-
   const debouncedSearch = useDebounce(search, 500);
+  const {selectCharacter} = useGlobalContext();
 
-  
   const fetchCharacters = async (url: string, isSearch: boolean = false) => {
     setIsLoading(true);
     try {
@@ -36,7 +39,7 @@ const CharactersListScreen = () => {
       } else {
         setStarWarsCharacters(prev => [...prev, ...data.results]);
       }
-      setNextPage(data.next); 
+      setNextPage(data.next);
     } catch (error) {
       console.error('Error al cargar personajes:', error);
     } finally {
@@ -44,14 +47,12 @@ const CharactersListScreen = () => {
     }
   };
 
-  
   useEffect(() => {
     if (nextPage) {
       fetchCharacters(nextPage);
     }
   }, []);
 
-  
   useEffect(() => {
     if (debouncedSearch !== '') {
       setSearchResults([]);
@@ -66,12 +67,18 @@ const CharactersListScreen = () => {
     }
   }, [debouncedSearch]);
 
- 
   const loadMoreCharacters = () => {
     if (nextPage && !isLoading) {
       fetchCharacters(nextPage, debouncedSearch !== '');
     }
   };
+  const handleSelectCharacter = useCallback(
+    (character: StarWarsCharacter) => {
+      selectCharacter(character);
+      NavigationService.navigate(Paths.CharacterDetailScreen);
+    },
+    [selectCharacter],
+  );
 
   return (
     <KeyboardAvoidingView
@@ -84,9 +91,13 @@ const CharactersListScreen = () => {
         <FlatList
           data={debouncedSearch !== '' ? searchResults : starWarsCharacters}
           style={{flex: 1}}
-          keyExtractor={(item) => item.url}
+          keyExtractor={(item, index) => `${item.name}-${index}`}
           renderItem={({item}) => (
-            <CharacterItem name={item.name} birthYear={item.birth_year} />
+            <CharacterItem
+              name={item.name}
+              birthYear={item.birth_year}
+              handleSelectCharacter={() => handleSelectCharacter(item)}
+            />
           )}
           onEndReached={loadMoreCharacters}
           onEndReachedThreshold={0.5}

@@ -1,15 +1,18 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import * as NavigationService from '@/navigation/NavigationService';
-import { Paths } from '@/navigation/paths';
-import { SVG } from '@/assets/svg';
+import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
+import {SVG} from '@/assets/svg';
 
 interface CharacterItemProps {
-    name: string;
-    birthYear: string;
-  }
+  name: string;
+  birthYear: string;
+  handleSelectCharacter: () => void;
+}
 
-const CharacterItem: React.FC<CharacterItemProps> = ({ name, birthYear }) => {
+const CharacterItem: React.FC<CharacterItemProps> = ({
+  name,
+  birthYear,
+  handleSelectCharacter,
+}) => {
   const initials = () => {
     const names = name.trim().split(' ');
     if (names.length === 0) return '';
@@ -23,10 +26,7 @@ const CharacterItem: React.FC<CharacterItemProps> = ({ name, birthYear }) => {
   };
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => NavigationService.navigate(Paths.CharacterDetailScreen)}
-    >
+    <TouchableOpacity style={styles.container} onPress={handleSelectCharacter}>
       <View style={styles.cardContainer}>
         <View style={styles.avatarInfoContainer}>
           <View style={styles.avatar}>
