@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -33,7 +33,7 @@ function ApplicationNavigator() {
               ),
               headerStyle: {
                 backgroundColor: '#F4C542',
-                height: 120,
+                height: Platform.OS === 'ios' ? 120 : 80
               },
               headerTitleStyle: {
                 fontWeight: '400',

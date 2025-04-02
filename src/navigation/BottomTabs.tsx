@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CharactersListScreen, SettingsScreen} from '@/screens';
 import {Paths} from './paths';
@@ -10,19 +11,20 @@ function BottomTabs() {
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: true,
-        tabBarActiveTintColor: 'red',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'lightgray',
       }}>
       <Tab.Screen
         name={Paths.CharactersListScreen}
         component={CharactersListScreen}
         options={{
           title: 'Personajes',
-          tabBarIcon: () => <SVG.ListIcon />,
+          tabBarIcon: ({ color }) => <SVG.ListIcon fill={color} />,
           tabBarLabel: () => null,
+          headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: '#F4C542',
-            height: 120,
+            height: Platform.OS === 'ios' ? 120 : 80
           },
           headerTitleStyle: {
             fontWeight: '400',
@@ -35,11 +37,12 @@ function BottomTabs() {
         component={SettingsScreen}
         options={{
           title: 'Ajustes',
-          tabBarIcon: () => <SVG.SettingsIcon />,
+          tabBarIcon: ({ color }) => <SVG.SettingsIcon fill={color} />,
           tabBarLabel: () => null,
+          headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: '#2d3748',
-            height: 120,
+            height: Platform.OS === 'ios' ? 120 : 80
           },
           headerTitleStyle: {
             fontWeight: '400',
