@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import {SVG} from '@/assets/svg';
+import {Avatar} from '@/components';
 
 interface CharacterItemProps {
   name: string;
@@ -13,13 +14,6 @@ const CharacterItem: React.FC<CharacterItemProps> = ({
   birthYear,
   handleSelectCharacter,
 }) => {
-  const initials = () => {
-    const names = name.trim().split(' ');
-    if (names.length === 0) return '';
-    if (names.length === 1) return names[0][0].toUpperCase();
-    return (names[0][0] + names[names.length - 1][0]).toUpperCase();
-  };
-
   const formattedBirthYear = () => {
     if (birthYear.toLowerCase() === 'unknown') return 'unknown';
     return birthYear.replace(/(\d+)([A-Za-z]+)/, '$1 $2');
@@ -28,11 +22,16 @@ const CharacterItem: React.FC<CharacterItemProps> = ({
   return (
     <TouchableOpacity style={styles.container} onPress={handleSelectCharacter}>
       <View style={styles.cardContainer}>
-        <View style={styles.avatarInfoContainer}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{initials()}</Text>
-          </View>
-          <View style={styles.infoContainer}>
+        <View style={styles.infoContainer}>
+          <Avatar
+            name={name}
+            width={50}
+            height={50}
+            fontSize={16}
+            borderWidth={2}
+            backgroundColor="lightgray"
+          />
+          <View style={styles.textContainer}>
             <Text style={styles.title}>{name}</Text>
             <Text style={styles.subtitle}>{formattedBirthYear()}</Text>
           </View>
@@ -60,24 +59,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  avatarInfoContainer: {
+  infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'lightgray',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-  },
-  avatarText: {
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  infoContainer: {
+  textContainer: {
     marginLeft: 10,
   },
   title: {
