@@ -6,6 +6,7 @@ import ThumbsUpIcon from './ThumbsUpIcon';
 import MaleIcon from './MaleIcon';
 import FemaleIcon from './FemaleIcon';
 import ArrowLeftIcon from './ArrowLeftIcon';
+import ThumbsDownIcon from './ThumbsDownIcon';
 
 export const SVG = {
   ListIcon,
@@ -13,6 +14,7 @@ export const SVG = {
   SettingsIcon,
   RightArrow,
   ThumbsUpIcon,
+  ThumbsDownIcon,
   MaleIcon,
   FemaleIcon,
   ArrowLeftIcon,
