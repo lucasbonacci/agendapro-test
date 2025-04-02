@@ -45,5 +45,6 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     fontWeight: '600',
+    color:'black'
   },
 });
