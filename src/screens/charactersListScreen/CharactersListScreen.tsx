@@ -10,8 +10,7 @@ import {
 
 import {useGlobalContext} from '@/hooks/useGlobalContext';
 import {StarWarsCharacter} from '@/types/StarWarsCharacter';
-import CharacterItem from './components/CharacterItem';
-import SearchInput from './components/SearchInput';
+import {SearchInput, CharacterItem, EmptyListComponent} from './components';
 import useDebounce from '@/hooks/useDebounce';
 import * as NavigationService from '@/navigation/NavigationService';
 import {Paths} from '@/navigation/paths';
@@ -108,6 +107,9 @@ const CharactersListScreen = () => {
                 handleSelectCharacter={() => handleSelectCharacter(item)}
               />
             )}
+            ListEmptyComponent={
+              <EmptyListComponent isSearch={debouncedSearch !== ''} />
+            }
             onEndReached={loadMoreCharacters}
             onEndReachedThreshold={0.5}
             ListFooterComponent={
