@@ -72,6 +72,7 @@ const CharactersListScreen = () => {
       fetchCharacters(nextPage, debouncedSearch !== '');
     }
   };
+
   const handleSelectCharacter = useCallback(
     (character: StarWarsCharacter) => {
       selectCharacter(character);
@@ -79,6 +80,9 @@ const CharactersListScreen = () => {
     },
     [selectCharacter],
   );
+
+  const dataToShow =
+    debouncedSearch !== '' ? searchResults : starWarsCharacters;
 
   return (
     <KeyboardAvoidingView
@@ -88,26 +92,34 @@ const CharactersListScreen = () => {
       enabled>
       <View style={{flex: 1}}>
         <SearchInput value={search} onChangeText={setSearch} />
-        <FlatList
-          data={debouncedSearch !== '' ? searchResults : starWarsCharacters}
-          style={{flex: 1}}
-          keyExtractor={(item, index) => `${item.name}-${index}`}
-          renderItem={({item}) => (
-            <CharacterItem
-              name={item.name}
-              birthYear={item.birth_year}
-              handleSelectCharacter={() => handleSelectCharacter(item)}
-            />
-          )}
-          onEndReached={loadMoreCharacters}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            isLoading ? <ActivityIndicator size="large" /> : null
-          }
-          removeClippedSubviews={true}
-          initialNumToRender={10}
-          windowSize={10}
-        />
+        {dataToShow.length === 0 && isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : (
+          <FlatList
+            data={dataToShow}
+            style={{flex: 1}}
+            keyExtractor={(item, index) => `${item.name}-${index}`}
+            renderItem={({item}) => (
+              <CharacterItem
+                name={item.name}
+                birthYear={item.birth_year}
+                handleSelectCharacter={() => handleSelectCharacter(item)}
+              />
+            )}
+            onEndReached={loadMoreCharacters}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={
+              isLoading && dataToShow.length > 0 ? (
+                <ActivityIndicator size="large" style={{marginVertical: 20}} />
+              ) : null
+            }
+            removeClippedSubviews={true}
+            initialNumToRender={10}
+            windowSize={10}
+          />
+        )}
       </View>
     </KeyboardAvoidingView>
   );
@@ -118,15 +130,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F2F4F6',
   },
-  itemContainer: {
+  loadingContainer: {
     flex: 1,
-    marginHorizontal: 8,
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'lightgray',
     justifyContent: 'center',
     alignItems: 'center',
   },
