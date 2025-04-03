@@ -10,10 +10,11 @@ import {
 
 import {useGlobalContext} from '@/hooks/useGlobalContext';
 import {StarWarsCharacter} from '@/types/StarWarsCharacter';
-import {SearchInput, CharacterItem, EmptyListComponent} from './components';
+import {SearchInput, EmptyListComponent} from './components';
 import useDebounce from '@/hooks/useDebounce';
 import * as NavigationService from '@/navigation/NavigationService';
 import {Paths} from '@/navigation/paths';
+import CharacterItem, {CHARACTER_ITEM_HEIGHT} from './components/CharacterItem';
 
 const API_URL = 'https://swapi.dev/api/people/';
 
@@ -111,7 +112,7 @@ const CharactersListScreen = () => {
               <EmptyListComponent isSearch={debouncedSearch !== ''} />
             }
             onEndReached={loadMoreCharacters}
-            onEndReachedThreshold={0.5}
+            onEndReachedThreshold={0.9}
             ListFooterComponent={
               isLoading && dataToShow.length > 0 ? (
                 <ActivityIndicator size="large" style={{marginVertical: 20}} />
@@ -119,7 +120,12 @@ const CharactersListScreen = () => {
             }
             removeClippedSubviews={true}
             initialNumToRender={10}
-            windowSize={10}
+            windowSize={5}
+            getItemLayout={(_, index) => ({
+              length: CHARACTER_ITEM_HEIGHT,
+              offset: CHARACTER_ITEM_HEIGHT * index,
+              index,
+            })}
           />
         )}
       </View>

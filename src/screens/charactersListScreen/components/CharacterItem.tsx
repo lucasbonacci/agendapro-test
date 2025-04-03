@@ -2,6 +2,7 @@ import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import {SVG} from '@/assets/svg';
 import {Avatar} from '@/components';
+export const CHARACTER_ITEM_HEIGHT = 106;
 
 interface CharacterItemProps {
   name: string;
