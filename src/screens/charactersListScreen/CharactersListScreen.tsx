@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -7,9 +7,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import {useInfiniteQuery} from '@tanstack/react-query';
 
 import {useGlobalContext} from '@/hooks/useGlobalContext';
 import {StarWarsCharacter} from '@/types/StarWarsCharacter';
+import {ErrorMessage} from '@/components';
 import {SearchInput, EmptyListComponent} from './components';
 import useDebounce from '@/hooks/useDebounce';
 import * as NavigationService from '@/navigation/NavigationService';
@@ -19,57 +21,42 @@ import CharacterItem, {CHARACTER_ITEM_HEIGHT} from './components/CharacterItem';
 const API_URL = 'https://swapi.dev/api/people/';
 
 const CharactersListScreen = () => {
-  const [starWarsCharacters, setStarWarsCharacters] = useState<
-    StarWarsCharacter[]
-  >([]);
-  const [searchResults, setSearchResults] = useState<StarWarsCharacter[]>([]);
   const [search, setSearch] = useState('');
-  const [nextPage, setNextPage] = useState<string | null>(API_URL);
-  const [isLoading, setIsLoading] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
   const {selectCharacter} = useGlobalContext();
 
-  const fetchCharacters = async (url: string, isSearch: boolean = false) => {
-    setIsLoading(true);
-    try {
+  const queryKey = debouncedSearch
+    ? ['characters', 'search', debouncedSearch]
+    : ['characters'];
+
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    error,
+  } = useInfiniteQuery({
+    queryKey: queryKey,
+    queryFn: async ({pageParam = 1}) => {
+      const url = debouncedSearch
+        ? `${API_URL}?search=${debouncedSearch}&page=${pageParam}`
+        : `${API_URL}?page=${pageParam}`;
       const response = await fetch(url);
-      const data = await response.json();
-      if (isSearch) {
-        setSearchResults(prev => [...prev, ...data.results]);
-      } else {
-        setStarWarsCharacters(prev => [...prev, ...data.results]);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-      setNextPage(data.next);
-    } catch (error) {
-      console.error('Error al cargar personajes:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      return response.json();
+    },
 
-  useEffect(() => {
-    if (nextPage) {
-      fetchCharacters(nextPage);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (debouncedSearch !== '') {
-      setSearchResults([]);
-      const searchUrl = `${API_URL}?search=${search}`;
-      setNextPage(searchUrl);
-      fetchCharacters(searchUrl, true);
-    } else {
-      setSearchResults([]);
-      setNextPage(API_URL);
-      setStarWarsCharacters([]);
-      fetchCharacters(API_URL);
-    }
-  }, [debouncedSearch]);
+    getNextPageParam: (lastPage, pages) =>
+      lastPage.next ? pages.length + 1 : undefined,
+    initialPageParam: 1,
+  });
 
   const loadMoreCharacters = () => {
-    if (nextPage && !isLoading) {
-      fetchCharacters(nextPage, debouncedSearch !== '');
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   };
 
@@ -81,15 +68,19 @@ const CharactersListScreen = () => {
     [selectCharacter],
   );
 
-  const dataToShow =
-    debouncedSearch !== '' ? searchResults : starWarsCharacters;
+  const dataToShow = data?.pages.flatMap(page => page.results) || [];
+
+  if (error) return <ErrorMessage />;
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 130 : 0}
-      enabled>
+      enabled
+      
+
+      >
       <View style={{flex: 1}}>
         <SearchInput value={search} onChangeText={setSearch} />
         {dataToShow.length === 0 && isLoading ? (
@@ -114,7 +105,7 @@ const CharactersListScreen = () => {
             onEndReached={loadMoreCharacters}
             onEndReachedThreshold={0.9}
             ListFooterComponent={
-              isLoading && dataToShow.length > 0 ? (
+              isFetchingNextPage ? (
                 <ActivityIndicator size="large" style={{marginVertical: 20}} />
               ) : null
             }

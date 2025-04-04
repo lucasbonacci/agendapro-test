@@ -1,72 +1,55 @@
-import {useEffect, useState} from 'react';
+import React from 'react';
 import {ScrollView, View, StyleSheet, ActivityIndicator} from 'react-native';
 import {useGlobalContext} from '@/hooks/useGlobalContext';
-import {StarWarsCharacter} from '@/types/StarWarsCharacter';
 import {Header, InfoList, InfoItem} from './components';
+import { ErrorMessage } from '@/components';
+import {StarWarsCharacter} from '@/types/StarWarsCharacter';
+import {useFetchMultipleResources} from '@/hooks/useFetchMultipleResources';
+import {useFetchSingleResource} from '@/hooks/useFetchSingleResource';
 
 const CharacterCard = () => {
   const {character} = useGlobalContext() as {character: StarWarsCharacter};
+  const {
+    data: films,
+    isLoading: loadingFilms,
+    isError: errorFilms,
+  } = useFetchMultipleResources(character.films, 'film');
+  const {
+    data: vehicles,
+    isLoading: loadingVehicles,
+    isError: errorVehicles,
+  } = useFetchMultipleResources(character.vehicles, 'vehicle');
+  const {
+    data: starships,
+    isLoading: loadingStarships,
+    isError: errorStarships,
+  } = useFetchMultipleResources(character.starships, 'starship');
+  const {
+    data: species,
+    isLoading: loadingSpecies,
+    isError: errorSpecies,
+  } = useFetchMultipleResources(character.species, 'species');
+  const {
+    data: homeWorld,
+    isLoading: loadingHomeWorld,
+    isError:isErrorHomeWorld,
+  } = useFetchSingleResource(character.homeworld, 'homeworld');
 
-  const [films, setFilms] = useState<string[]>([]);
-  const [vehicles, setVehicles] = useState<string[]>([]);
-  const [starships, setStarships] = useState<string[]>([]);
-  const [species, setSpecies] = useState<string[]>([]);
-  const [homeWorld, setHomeWorld] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
+  const isLoading =
+    loadingFilms ||
+    loadingVehicles ||
+    loadingStarships ||
+    loadingSpecies ||
+    loadingHomeWorld;
+    
+  const hasError =
+    errorFilms ||
+    errorVehicles ||
+    errorStarships ||
+    errorSpecies ||
+    isErrorHomeWorld;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!character) return;
-      setIsLoading(true);
-      try {
-        const filmsData = await Promise.all(
-          character.films.map(async url => {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data.title;
-          }),
-        );
-        setFilms(filmsData);
-
-        const vehiclesData = await Promise.all(
-          character.vehicles.map(async url => {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data.name;
-          }),
-        );
-        setVehicles(vehiclesData);
-
-        const starshipsData = await Promise.all(
-          character.starships.map(async url => {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data.name;
-          }),
-        );
-        setStarships(starshipsData);
-
-        const speciesData = await Promise.all(
-          character.species.map(async url => {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data.name;
-          }),
-        );
-        setSpecies(speciesData);
-
-        const homeworldResponse = await fetch(character.homeworld);
-        const homeworldData = await homeworldResponse.json();
-        setHomeWorld(homeworldData.name);
-      } catch (error) {
-        console.error('Error fetching extra data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [character]);
+  if (hasError) return <ErrorMessage/>;
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -76,7 +59,6 @@ const CharacterCard = () => {
         gender={character.gender}
         films={character.films}
       />
-
       <View style={styles.infoContainer}>
         {isLoading ? (
           <View style={styles.loadingContainer}>
